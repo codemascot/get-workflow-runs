@@ -39,7 +39,6 @@ beforeAll(async () => {
     .reply(200, repos2body, repos2headers);
 
   // Set up all the repos
-  console.log(path.join(process.cwd(), "TestData"));
   const repoResponses = (
     await fs.readdir(path.join(process.cwd(), "TestData"))
   ).filter((name) => name.startsWith("runs_"));
