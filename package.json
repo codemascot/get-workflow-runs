@@ -1,0 +1,26 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lenakh97/get-workflow-runs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lenakh97/get-workflow-runs/issues"
+  },
+  "homepage": "https://github.com/Lenakh97/get-workflow-runs#readme",
+  "devDependencies": {
+    "jest": "^27.1.1",
+    "nock": "^13.1.3",
+    "prettier": "^2.3.2"
+  }
+}
