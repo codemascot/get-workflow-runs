@@ -1,23 +1,10 @@
 import axios from "axios";
 import parse from "parse-link-header";
-import { promises as fs } from "fs";
-//import nock from "nock";
 
 const status = "completed";
 const teamName = "nRF Asset Tracker";
 
 export const getWorkflowRuns = () => {
-  /*const scope = nock("https://api.github.com")
-    .get("/orgs/NordicSemiconductor")
-    .reply(200, {
-      headers: {
-        server: "GitHub.com",
-        date: "Fri, 10 Sep 2021 08:23:54 GMT",
-        "content-type": "application/json; charset=utf-8",
-        "content-length": "1754",
-      },
-    });
-  console.log(scope);*/
   return axios
     .get("https://api.github.com/orgs/NordicSemiconductor", {
       headers: {
@@ -25,20 +12,6 @@ export const getWorkflowRuns = () => {
       },
     })
     .then((res) => {
-      console.log(res);
-      fs.writeFile(
-        "./TestData/organizationHeaders.json",
-        JSON.stringify(
-          {
-            url: "https://api.github.com/orgs/NordicSemiconductor",
-            headers: res.headers,
-            body: res.data,
-          },
-          null,
-          2
-        ),
-        "utf-8"
-      );
       const NordicSemiconductor = res.data.id;
       return axios
         .get(
@@ -52,22 +25,6 @@ export const getWorkflowRuns = () => {
           }
         )
         .then((res) => {
-          fs.writeFile(
-            "./TestData/teams.json",
-            JSON.stringify(
-              {
-                url:
-                  "https://api.github.com/organizations/" +
-                  NordicSemiconductor +
-                  "/teams",
-                headers: res.headers,
-                body: res.data,
-              },
-              null,
-              2
-            ),
-            "utf-8"
-          );
           let teamID;
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i].name === teamName) {
@@ -91,25 +48,6 @@ export const getWorkflowRuns = () => {
               }
             )
             .then((responseOne) => {
-              fs.writeFile(
-                "./TestData/repos" + pageNumber + ".json",
-                JSON.stringify(
-                  {
-                    url:
-                      "https://api.github.com/organizations/" +
-                      NordicSemiconductor +
-                      "/team/" +
-                      teamID +
-                      "/repos?page=" +
-                      pageNumber,
-                    headers: responseOne.headers,
-                    body: responseOne.data,
-                  },
-                  null,
-                  2
-                ),
-                "utf-8"
-              );
               var parsed = parse(responseOne.headers["link"]);
               const repo_promises = [];
               for (let i = 0; i < parsed.last.page - 1; i++) {
@@ -130,25 +68,6 @@ export const getWorkflowRuns = () => {
                       }
                     )
                     .then((response) => {
-                      fs.writeFile(
-                        "./TestData/repos" + pageNumber + ".json",
-                        JSON.stringify(
-                          {
-                            url:
-                              "https://api.github.com/organizations/" +
-                              NordicSemiconductor +
-                              "/team/" +
-                              teamID +
-                              "/repos?page=" +
-                              pageNumber,
-                            headers: response.headers,
-                            body: response.data,
-                          },
-                          null,
-                          2
-                        ),
-                        "utf-8"
-                      );
                       responseOne = responseOne.data.concat(response.data);
                       const run_promises = [];
                       for (let i = 0; i < responseOne.length; i++) {
@@ -166,28 +85,9 @@ export const getWorkflowRuns = () => {
                                 },
                               }
                             )
-                            .then((res) => {
-                              fs.writeFile(
-                                "./TestData/runs_" + repo_name + ".json",
-                                JSON.stringify(
-                                  {
-                                    url:
-                                      "https://api.github.com/repos/NordicSemiconductor/" +
-                                      repo_name +
-                                      "/actions/runs",
-                                    headers: res.headers,
-                                    body: res.data,
-                                  },
-                                  null,
-                                  2
-                                ),
-                                "utf-8"
-                              );
-                              return getLatestSagaStatus(
-                                res.data,
-                                default_branch
-                              );
-                            })
+                            .then((res) =>
+                              getLatestSagaStatus(res.data, default_branch)
+                            )
                             .catch((error) => {
                               console.error("error2:", error);
                             })
