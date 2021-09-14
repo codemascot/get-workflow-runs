@@ -1,109 +1,89 @@
 import axios from "axios";
 import parse from "parse-link-header";
 import { getOrganization } from "./lib/getOrganization.js";
+import { getTeamId } from "./lib/getTeam.js";
 
 const status = "completed";
 const teamName = "nRF Asset Tracker";
 
 export const getWorkflowRuns = async () => {
   const organization = await getOrganization("NordicSemiconductor");
-
+  const teamID = await getTeamId(organization.id, teamName);
+  let pageNumber = 1;
   return axios
-    .get("https://api.github.com/organizations/" + organization.id + "/teams", {
-      headers: {
-        Authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-    })
-    .then((res) => {
-      let teamID;
-      for (let i = 0; i < res.data.length; i++) {
-        if (res.data[i].name === teamName) {
-          teamID = res.data[i].id;
-          break;
-        }
+    .get(
+      "https://api.github.com/organizations/" +
+        organization.id +
+        "/team/" +
+        teamID +
+        "/repos?page=" +
+        pageNumber,
+      {
+        headers: {
+          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        },
       }
-      let pageNumber = 1;
-      return axios
-        .get(
-          "https://api.github.com/organizations/" +
-            organization.id +
-            "/team/" +
-            teamID +
-            "/repos?page=" +
-            pageNumber,
-          {
-            headers: {
-              Authorization: `token ${process.env.GITHUB_TOKEN}`,
-            },
-          }
-        )
-        .then((responseOne) => {
-          var parsed = parse(responseOne.headers["link"]);
-          const repo_promises = [];
-          for (let i = 0; i < parsed.last.page - 1; i++) {
-            pageNumber++;
-            repo_promises.push(
-              axios
-                .get(
-                  "https://api.github.com/organizations/" +
-                    organization.id +
-                    "/team/" +
-                    teamID +
-                    "/repos?page=" +
-                    pageNumber,
-                  {
-                    headers: {
-                      Authorization: `token ${process.env.GITHUB_TOKEN}`,
-                    },
-                  }
-                )
-                .then((response) => {
-                  responseOne = responseOne.data.concat(response.data);
-                  const run_promises = [];
-                  for (let i = 0; i < responseOne.length; i++) {
-                    const repo_name = responseOne[i].name;
-                    const default_branch = responseOne[i].default_branch;
-                    run_promises.push(
-                      axios
-                        .get(
-                          "https://api.github.com/repos/NordicSemiconductor/" +
-                            repo_name +
-                            "/actions/runs",
-                          {
-                            headers: {
-                              Authorization: `token ${process.env.GITHUB_TOKEN}`,
-                            },
-                          }
-                        )
-                        .then((res) =>
-                          getLatestSagaStatus(res.data, default_branch)
-                        )
-                        .catch((error) => {
-                          console.error("error2:", error);
-                        })
-                    );
-                  }
-                  return Promise.all(run_promises);
-                })
-                .catch((error) => {
-                  console.error("error2:", error);
-                })
-            );
-          }
-          return Promise.all(repo_promises);
-        })
-        .then((repoRuns) => ({
-          workflow_runs: repoRuns.flat(),
-        }))
-        .catch((error) => {
-          console.error("error:", error);
-        });
+    )
+    .then((responseOne) => {
+      var parsed = parse(responseOne.headers["link"]);
+      const repo_promises = [];
+      for (let i = 0; i < parsed.last.page - 1; i++) {
+        pageNumber++;
+        repo_promises.push(
+          axios
+            .get(
+              "https://api.github.com/organizations/" +
+                organization.id +
+                "/team/" +
+                teamID +
+                "/repos?page=" +
+                pageNumber,
+              {
+                headers: {
+                  Authorization: `token ${process.env.GITHUB_TOKEN}`,
+                },
+              }
+            )
+            .then((response) => {
+              responseOne = responseOne.data.concat(response.data);
+              const run_promises = [];
+              for (let i = 0; i < responseOne.length; i++) {
+                const repo_name = responseOne[i].name;
+                const default_branch = responseOne[i].default_branch;
+                run_promises.push(
+                  axios
+                    .get(
+                      "https://api.github.com/repos/NordicSemiconductor/" +
+                        repo_name +
+                        "/actions/runs",
+                      {
+                        headers: {
+                          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+                        },
+                      }
+                    )
+                    .then((res) =>
+                      getLatestSagaStatus(res.data, default_branch)
+                    )
+                    .catch((error) => {
+                      console.error("error2:", error);
+                    })
+                );
+              }
+              return Promise.all(run_promises);
+            })
+            .catch((error) => {
+              console.error("error2:", error);
+            })
+        );
+      }
+      return Promise.all(repo_promises);
     })
+    .then((repoRuns) => ({
+      workflow_runs: repoRuns.flat(),
+    }))
     .catch((error) => {
-      console.error("error2:", error);
-    })
-    .catch((error) => {
-      console.error("error2:", error);
+      console.error("error:", error);
     });
 };
 
