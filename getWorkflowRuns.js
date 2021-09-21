@@ -32,24 +32,9 @@ export const getWorkflowRuns = async () => {
   // Get all the runs
   const run_promises = [];
   for (const repo of repos) {
+    let run = await getRunPromises(repo);
     run_promises.push(
-      axios
-        .get(
-          "https://api.github.com/repos/NordicSemiconductor/" +
-            repo.name +
-            "/actions/runs",
-          {
-            headers: {
-              Authorization: `token ${process.env.GITHUB_TOKEN}`,
-            },
-          }
-        )
-        .then((res) =>
-          getLatestSagaStatus(res.data, repo.default_branch, status)
-        )
-        .catch((error) => {
-          console.error("error2:", error);
-        })
+      getLatestSagaStatus(run.data, repo.default_branch, status)
     );
   }
   const repoRuns = await Promise.all(run_promises);
