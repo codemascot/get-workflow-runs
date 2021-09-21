@@ -32,7 +32,7 @@ export const getWorkflowRuns = async () => {
   // Get all the runs
   const run_promises = [];
   for (const repo of repos) {
-    let run = await getRunPromises(repo);
+    let run = await getRunPromises(repo.name);
     run_promises.push(
       getLatestSagaStatus(run.data, repo.default_branch, status)
     );
