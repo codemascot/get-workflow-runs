@@ -37,6 +37,5 @@ jobs:
         cp JSONObject.json ./public
         git add public/JSONObject.json
         git commit -m "update JSON"
-        git remote add origin https://github.com/Lenakh97/get-workflow-runs.git
         git push -f
       
