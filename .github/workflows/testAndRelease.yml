@@ -2,7 +2,6 @@ name: Test and release
 
 on:
   push:
-    branches: gh-pages
   schedule:
     - cron: 0 1 * * *
 
