@@ -8,7 +8,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
-  build:
+  run:
     name: "run code"
     runs-on: ubuntu-latest
     steps: 
