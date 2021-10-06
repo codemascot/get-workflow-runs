@@ -37,5 +37,5 @@ jobs:
         cp JSONObject.json ./public
         git add public/JSONObject.json
         git commit -m "update JSON"
-         git push --set-upstream origin gh-pages -f
+        git push --set-upstream origin gh-pages -f
       
