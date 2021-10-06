@@ -31,6 +31,7 @@ jobs:
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
+        echo ${{ secrets.TOKEN }} | gh auth login --with-token
         git config --global user.email "Lenaharaldseid@gmail.com"
         git config --global user.name "Lenakh97"
         mkdir public
