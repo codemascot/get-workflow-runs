@@ -15,8 +15,7 @@ jobs:
         with:
           node-version: "16.x"
       - name: Install dependencies
-        run: |
-        npm ci --no-audit
+        run: npm ci --no-audit
       - name: Run code
         run: node fetch.js
 
