@@ -31,8 +31,7 @@ jobs:
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
-        cd public
-        cp ../JSONObject.json ./
+        node fetch.js
         git add JSONObject.json
         git commit -m "update JSON"
         git push -f
