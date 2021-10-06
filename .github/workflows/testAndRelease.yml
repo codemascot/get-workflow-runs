@@ -16,7 +16,7 @@ jobs:
           node-version: "16.x"
       - name: Install dependencies
         run: |
-        npm ci
+        npm ci --no-audit
         node --experimental-modules --es-module-specifier-resolution=node app.js
       - name: Run code
         run: node fetch.js
