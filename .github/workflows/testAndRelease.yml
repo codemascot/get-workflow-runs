@@ -1,0 +1,28 @@
+name: Test and release
+
+on:
+  push:
+    branches: gh-pages
+  schedule:
+    - cron: 0 1 * * *
+
+jobs:
+  build:
+    name: "run code"
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v2
+      - name: Run code
+        run: node fetch.js
+
+  publish:
+    - uses: actions/checkout@v2
+    - name: Publish to github pages
+      run: |
+        git config --global user.email "actions@example.com"
+        git config --global user.name "GitHub Actions"
+        git checkout -b gh-pages
+        cp ../JSONObject.json ./
+        git add JSONObject.json
+        git commit -m "update JSON"
+        git push -f
