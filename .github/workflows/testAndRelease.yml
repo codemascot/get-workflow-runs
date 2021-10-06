@@ -31,7 +31,6 @@ jobs:
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
-        node fetch.js
         mkdir public
         cp JSONObject.json ./public
         git add public/JSONObject.json
