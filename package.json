@@ -24,6 +24,7 @@
     "prettier": "^2.3.2"
   },
   "dependencies": {
+    "axios": "^0.22.0",
     "parse-link-header": "^1.0.1"
   }
 }
