@@ -31,7 +31,7 @@ jobs:
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
-        echo ${{ secrets.TOKEN }} | gh auth login --with-token
+        echo GITHUB_TOKEN | gh auth login --with-token
         mkdir public
         cp JSONObject.json ./public
         git add public/JSONObject.json
