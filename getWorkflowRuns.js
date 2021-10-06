@@ -1,4 +1,3 @@
-import axios from "axios";
 import parse from "parse-link-header";
 import { getReposResponse } from "./lib/getReposResponse.js";
 import { getOrganization } from "./lib/getOrganization.js";
