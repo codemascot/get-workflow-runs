@@ -22,5 +22,8 @@
     "jest": "^27.1.1",
     "nock": "^13.1.3",
     "prettier": "^2.3.2"
+  },
+  "dependencies": {
+    "parse-link-header": "^1.0.1"
   }
 }
