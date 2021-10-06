@@ -29,14 +29,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/labeler@v2
-      with:
-        repo-token: ${{ secrets.TOKEN }}
+      
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
+        echo "machine github.com login accesskey password ${{ secrets.GITHUB_TOKEN }}" > ~/.netrc
+        git config --global user.email "actions@example.com"
+        git config --global user.name "GitHub Actions"
         mkdir public
         cp JSONObject.json ./public
         git add public/JSONObject.json
         git commit -m "update JSON"
         git push --set-upstream origin gh-pages -f
+
       
