@@ -30,8 +30,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Publish to github pages
       run: |
-        git config --global user.email "actions@example.com"
-        git config --global user.name "GitHub Actions"
         git checkout -b gh-pages
         cd public
         cp ../JSONObject.json ./
