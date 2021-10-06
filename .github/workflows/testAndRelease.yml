@@ -28,10 +28,12 @@ jobs:
     needs: [build]
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/labeler@v2
+      with:
+        repo-token: ${{ secrets.TOKEN }}
     - name: Publish to github pages
       run: |
         git checkout -b gh-pages
-        echo GITHUB_TOKEN | gh auth login --with-token
         mkdir public
         cp JSONObject.json ./public
         git add public/JSONObject.json
