@@ -31,8 +31,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           mkdir public
           cp JSONObject.json ./public
-          git add public/JSONObject.json
+          cd public
+          git init
+          git add JSONObject.json
           git commit -m "update JSON"
-          git push --set-upstream origin gh-pages -f
-
-  
+          git remote add origin https://github.com/${GITHUB_REPOSITORY}.git
+          git push -f origin HEAD:gh-pages
