@@ -1,15 +1,16 @@
 import parse from "parse-link-header";
 import { getReposResponse } from "./lib/getReposResponse.js";
-import { getOrganization } from "./lib/getOrganization.js";
-import { getRunPromises } from "./lib/getRunPromises.js";
 import { getTeamId } from "./lib/getTeam.js";
 import { getLatestSagaStatus } from "./lib/getLatestSagaStatus.js";
+import { getInfoFromApi } from "./lib/getInfoFromApi.js";
 
 const status = "completed";
 const teamName = "nRF Asset Tracker";
 
 export const getWorkflowRuns = async () => {
-  const organization = await getOrganization("NordicSemiconductor");
+  const organization = (
+    await getInfoFromApi("https://api.github.com/orgs/NordicSemiconductor")
+  ).data;
   const teamID = await getTeamId(organization.id, teamName);
 
   // Get all repositories
@@ -31,7 +32,11 @@ export const getWorkflowRuns = async () => {
   // Get all the runs
   const run_promises = [];
   for (const repo of repos) {
-    let run = await getRunPromises(repo.name);
+    let run = await getInfoFromApi(
+      "https://api.github.com/repos/NordicSemiconductor/" +
+        repo.name +
+        "/actions/runs"
+    );
     run_promises.push(
       getLatestSagaStatus(run.data, repo.default_branch, status)
     );
