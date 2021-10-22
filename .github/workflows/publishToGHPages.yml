@@ -10,20 +10,25 @@ env:
 
 jobs:
   run:
-    name: "run code"
+    name: Publish JSON
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: "16.x"
+      - name: Keep npm cache around to speed up installs
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci --no-audit
       - name: Run Unit Tests
         run: npm test
-      - name: Run code
+      - name: Update JSON
         run: node fetch.js 
-      - name: Publish to github pages
+      - name: Publish to GitHub pages
         run: |
           git checkout -b gh-pages
           echo "machine github.com login accesskey password ${{ secrets.TOKEN }}" > ~/.netrc
