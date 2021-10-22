@@ -30,7 +30,6 @@ jobs:
         run: node fetch.js 
       - name: Publish to GitHub pages
         run: |
-          git checkout -b gh-pages
           echo "machine github.com login accesskey password ${{ secrets.TOKEN }}" > ~/.netrc
           git config --global user.email "actions@example.com"
           git config --global user.name "GitHub Actions"
