@@ -18,10 +18,13 @@ export const getWorkflowRuns = async () => {
   let parsedHeader;
   const repos = [];
   do {
-    const reposResponse = await getReposResponse(
-      organization.id,
-      teamID,
-      pageNumber
+    const reposResponse = await getInfoFromApi(
+      "https://api.github.com/organizations/" +
+        organization.id +
+        "/team/" +
+        teamID +
+        "/repos?page=" +
+        pageNumber
     );
     parsedHeader = parse(reposResponse.headers["link"]);
     for (const repo of reposResponse.data) {
