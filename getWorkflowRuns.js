@@ -1,5 +1,4 @@
 import parse from "parse-link-header";
-import { getReposResponse } from "./lib/getReposResponse.js";
 import { getTeamId } from "./lib/getTeam.js";
 import { getLatestSagaStatus } from "./lib/getLatestSagaStatus.js";
 import { getInfoFromApi } from "./lib/getInfoFromApi.js";
