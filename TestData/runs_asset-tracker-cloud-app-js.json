@@ -435,7 +435,7 @@
         "head_sha": "b63b7b0c9d230339c768898139cd583e5f828987",
         "run_number": 1489,
         "event": "push",
-        "status": "completed",
+        "status": "in_progress",
         "conclusion": "success",
         "workflow_id": 5500628,
         "check_suite_id": 3728887281,
