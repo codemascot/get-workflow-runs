@@ -4,7 +4,7 @@ import { getLatestSagaStatus } from "./lib/getLatestSagaStatus.js";
 import { getInfoFromApi } from "./lib/getInfoFromApi.js";
 
 const status = "completed";
-const teamName = "nRF Asset Tracker";
+const teamName = "nRF Asset Tracker"; 
 
 export const getWorkflowRuns = async () => {
   const organization = (
