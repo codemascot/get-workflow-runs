@@ -13,11 +13,11 @@ describe("getLatestSagaStatus", () => {
   };
 
   it("should return the latest workflow run for a given branch out of a listof workflow runs", () => {
-    const result = getLatestSagaStatus(
-      { workflow_runs: [run] },
-      "saga",
-      "completed"
-    );
+    const result = getLatestSagaStatus({
+      workflow_runs: [run],
+      expectedStatus: "completed",
+      default_branch: "saga",
+    });
     expect(result).toEqual({
       name: "my-test-repo",
       branch: "saga",
@@ -28,18 +28,16 @@ describe("getLatestSagaStatus", () => {
   });
 
   it("should ignore runs with unexpected status", () => {
-    const result = getLatestSagaStatus(
-      {
-        workflow_runs: [
-          {
-            ...run,
-            status: "in_progress",
-          },
-        ],
-      },
-      "saga",
-      "completed"
-    );
+    const result = getLatestSagaStatus({
+      workflow_runs: [
+        {
+          ...run,
+          status: "in_progress",
+        },
+      ],
+      expectedStatus: "completed",
+      default_branch: "saga",
+    });
     expect(result).toBeUndefined();
   });
 });

@@ -1,5 +1,5 @@
-import nock from "nock";
-import { getTeamId } from "./getTeam.js";
+import * as nock from "nock";
+import { getTeamId } from "./getTeam";
 const teamName = "nRF Asset Tracker";
 
 beforeAll(async () => {

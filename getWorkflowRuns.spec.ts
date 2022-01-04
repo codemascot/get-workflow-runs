@@ -1,14 +1,15 @@
 import { promises as fs } from "fs";
-import path from "path";
-import { getWorkflowRuns } from "./getWorkflowRuns.js";
-import nock from "nock";
+import * as path from "path";
+import { getWorkflowRuns } from "./getWorkflowRuns";
+import * as nock from "nock";
+import {URL} from "url";
 
-const getResponse = async (filename) =>
+const getResponse = async (filename: string) =>
   JSON.parse(
-    await fs.readFile(path.join(process.cwd(), "TestData", filename + ".json"))
+    ((await fs.readFile(path.join(process.cwd(), "TestData", filename + ".json"))).toString())
   );
 
-const getResponseBody = async (filename) => (await getResponse(filename)).body;
+const getResponseBody = async (filename: string) => (await getResponse(filename)).body;
 
 beforeAll(async () => {
   const scope = nock("https://api.github.com");
@@ -66,14 +67,3 @@ test("comparing number of elements", async () => {
 afterAll(() => {
   expect(nock.isDone()).toBeTruthy();
 });
-
-/*test("check if saga", async () => {
-  const testData = JSON.parse(fs.readFileSync("testData.json", "utf-8"));
-  const actualData = await getWorkflowRuns();
-  for (let i = 0; i < actualData.workflow_runs.length; i++) {
-    console.log(actualData.workflow_runs[i]);
-    expect(actualData.workflow_runs[i].branch).toEqual("saga");
-  }
-  //expect(actualData.workflow_runs[1].branch).toEqual("saga");
-});
-*/

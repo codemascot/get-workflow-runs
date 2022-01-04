@@ -1,4 +1,4 @@
-import nock from "nock";
+import * as nock from "nock";
 import { getInfoFromApi } from "./getInfoFromApi";
 
 beforeAll(async () => {
@@ -48,21 +48,19 @@ describe("getOrganization", () => {
   it("should resolve an organization name to an ID", async () => {
     expect(
       await getInfoFromApi("https://api.github.com/orgs/NordicSemiconductor")
-    ).toMatchObject(
-      {},
-      {
+    ).toMatchObject({
+      data: {
         id: 33217104,
-      }
-    );
+      },
+    });
 
     expect(
       await getInfoFromApi("https://api.github.com/orgs/ACME")
-    ).toMatchObject(
-      {},
-      {
+    ).toMatchObject({
+      data: {
         id: 1234567,
-      }
-    );
+      },
+    });
     expect(
       await getInfoFromApi(
         "https://api.github.com/repos/NordicSemiconductor/asset-tracker-cloud-app-js/actions/runs"

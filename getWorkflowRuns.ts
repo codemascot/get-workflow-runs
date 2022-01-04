@@ -1,7 +1,8 @@
-import parse from "parse-link-header";
-import { getTeamId } from "./lib/getTeam.js";
-import { getLatestSagaStatus } from "./lib/getLatestSagaStatus.js";
-import { getInfoFromApi } from "./lib/getInfoFromApi.js";
+import * as parse from "parse-link-header";
+import { Links } from "parse-link-header";
+import { getTeamId } from "./lib/getTeam";
+import { getLatestSagaStatus, WorkflowRun } from "./lib/getLatestSagaStatus";
+import { getInfoFromApi } from "./lib/getInfoFromApi";
 
 const status = "completed";
 const teamName = "nRF Asset Tracker"; 
@@ -14,10 +15,10 @@ export const getWorkflowRuns = async () => {
 
   // Get all repositories
   let pageNumber = 1;
-  let parsedHeader;
+  let parsedHeader:Links | null;
   const repos = [];
   do {
-    const reposResponse = await getInfoFromApi(
+    const reposResponse = await getInfoFromApi<{name:string, default_branch:string}[]>(
       "https://api.github.com/organizations/" +
         organization.id +
         "/team/" +
@@ -29,18 +30,24 @@ export const getWorkflowRuns = async () => {
     for (const repo of reposResponse.data) {
       repos.push({ name: repo.name, default_branch: repo.default_branch });
     }
-  } while (pageNumber++ <= parsedHeader?.last?.page ?? -1);
+  } while (pageNumber++ <= parseInt(parsedHeader?.last?.page ?? '-1', 10));
 
   // Get all the runs
   const run_promises = [];
   for (const repo of repos) {
-    let run = await getInfoFromApi(
+    let run = await getInfoFromApi<{workflow_runs: WorkflowRun[]}>(
       "https://api.github.com/repos/NordicSemiconductor/" +
         repo.name +
         "/actions/runs"
     );
     run_promises.push(
-      getLatestSagaStatus(run.data, repo.default_branch, status)
+      getLatestSagaStatus(
+        {
+        workflow_runs: run.data.workflow_runs, 
+        expectedStatus: status,
+        default_branch: repo.default_branch, 
+        }
+        )
     );
   }
   const repoRuns = await Promise.all(run_promises);
