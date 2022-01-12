@@ -1,43 +1,43 @@
-import { getLatestSagaStatus } from "./getLatestSagaStatus";
+import { getLatestSagaStatus } from './getLatestSagaStatus'
 
-describe("getLatestSagaStatus", () => {
-  const run = {
-    head_branch: "saga",
-    status: "completed",
-    conclusion: "success",
-    html_url: "https://example.com",
-    updated_at: "2021-01-01T00:00:00Z",
-    repository: {
-      name: "my-test-repo",
-    },
-  };
+describe('getLatestSagaStatus', () => {
+	const run = {
+		head_branch: 'saga',
+		status: 'completed',
+		conclusion: 'success',
+		html_url: 'https://example.com',
+		updated_at: '2021-01-01T00:00:00Z',
+		repository: {
+			name: 'my-test-repo',
+		},
+	}
 
-  it("should return the latest workflow run for a given branch out of a listof workflow runs", () => {
-    const result = getLatestSagaStatus({
-      workflow_runs: [run],
-      expectedStatus: "completed",
-      default_branch: "saga",
-    });
-    expect(result).toEqual({
-      name: "my-test-repo",
-      branch: "saga",
-      conclusion: "success",
-      url: "https://example.com",
-      updated_at: "2021-01-01T00:00:00Z",
-    });
-  });
+	it('should return the latest workflow run for a given branch out of a listof workflow runs', () => {
+		const result = getLatestSagaStatus({
+			workflow_runs: [run],
+			expectedStatus: 'completed',
+			default_branch: 'saga',
+		})
+		expect(result).toEqual({
+			name: 'my-test-repo',
+			branch: 'saga',
+			conclusion: 'success',
+			url: 'https://example.com',
+			updated_at: '2021-01-01T00:00:00Z',
+		})
+	})
 
-  it("should ignore runs with unexpected status", () => {
-    const result = getLatestSagaStatus({
-      workflow_runs: [
-        {
-          ...run,
-          status: "in_progress",
-        },
-      ],
-      expectedStatus: "completed",
-      default_branch: "saga",
-    });
-    expect(result).toBeUndefined();
-  });
-});
+	it('should ignore runs with unexpected status', () => {
+		const result = getLatestSagaStatus({
+			workflow_runs: [
+				{
+					...run,
+					status: 'in_progress',
+				},
+			],
+			expectedStatus: 'completed',
+			default_branch: 'saga',
+		})
+		expect(result).toBeUndefined()
+	})
+})
