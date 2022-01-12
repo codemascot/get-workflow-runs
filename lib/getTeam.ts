@@ -1,4 +1,4 @@
-import { getInfoFromApi } from "./getInfoFromApi";
+import { getInfoFromApi } from "./getInfoFromApi.js";
 
 export const getTeamId = async (
   organization: number,
