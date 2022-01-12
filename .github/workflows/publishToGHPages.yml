@@ -27,7 +27,7 @@ jobs:
       - name: Run Unit Tests
         run: npm test
       - name: Update JSON
-        run: node fetch.js 
+        run: node fetch.ts 
       - name: Publish to GitHub pages
         run: |
           echo "machine github.com login accesskey password ${{ secrets.TOKEN }}" > ~/.netrc
