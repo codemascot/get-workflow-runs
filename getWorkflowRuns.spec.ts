@@ -1,8 +1,8 @@
 import { promises as fs } from "fs";
+import nock from "nock";
 import * as path from "path";
-import { getWorkflowRuns } from "./getWorkflowRuns";
-import * as nock from "nock";
-import {URL} from "url";
+import { URL } from "url";
+import { getWorkflowRuns } from "./getWorkflowRuns.js";
 
 const getResponse = async (filename: string) =>
   JSON.parse(

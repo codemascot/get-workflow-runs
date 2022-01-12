@@ -1,8 +1,7 @@
-import * as parse from "parse-link-header";
-import { Links } from "parse-link-header";
-import { getTeamId } from "./lib/getTeam.js";
-import { getLatestSagaStatus, WorkflowRun } from "./lib/getLatestSagaStatus.js";
+import parse, { Links } from "parse-link-header";
 import { getInfoFromApi } from "./lib/getInfoFromApi.js";
+import { getLatestSagaStatus, WorkflowRun } from "./lib/getLatestSagaStatus.js";
+import { getTeamId } from "./lib/getTeam.js";
 
 const status = "completed";
 const teamName = "nRF Asset Tracker"; 
