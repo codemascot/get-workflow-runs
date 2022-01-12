@@ -5,6 +5,7 @@
       "outDir": "dist/",
       "moduleResolution": "node",
       "module": "ES2020",
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true
     }
   }
