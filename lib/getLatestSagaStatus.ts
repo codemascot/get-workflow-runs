@@ -25,16 +25,15 @@ export function getLatestSagaStatus({
 	expectedStatus: string
 }): JSONOBJECT | undefined {
 	for (const run of workflow_runs) {
-		if (run.head_branch === default_branch) {
-			if (run.status === expectedStatus) {
-				return {
-					name: run.repository.name,
-					branch: run.head_branch,
-					conclusion: run.conclusion,
-					url: run.html_url,
-					updated_at: run.updated_at,
-				}
-			}
+		if (run.head_branch !== default_branch || run.status !== expectedStatus) {
+			continue
+		}
+		return {
+			name: run.repository.name,
+			branch: run.head_branch,
+			conclusion: run.conclusion,
+			url: run.html_url,
+			updated_at: run.updated_at,
 		}
 	}
 	return undefined
