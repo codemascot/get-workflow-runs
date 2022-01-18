@@ -9,12 +9,10 @@ export const getTeamId = async (
 			organization.toString() +
 			'/teams',
 	)
-	let teamID: number | undefined = undefined
 	for (const i of response.data) {
 		if (i.name === teamName) {
-			teamID = i.id
-			break
+			return i.id
 		}
 	}
-	return teamID
+	return undefined
 }
