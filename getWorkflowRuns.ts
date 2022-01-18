@@ -34,7 +34,7 @@ export const getWorkflowRuns = async () => {
   // Get all the runs
   const run_promises = [];
   for (const repo of repos) {
-    let run = await getInfoFromApi<{workflow_runs: WorkflowRun[]}>(
+    const run = await getInfoFromApi<{workflow_runs: WorkflowRun[]}>(
       "https://api.github.com/repos/NordicSemiconductor/" +
         repo.name +
         "/actions/runs"
